@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState, FormEvent } from 'react'
+import { useRouter } from "next/navigation";
 
 const RegisterFrom = () => {
   const [name, setName] = useState('')
@@ -8,11 +9,51 @@ const RegisterFrom = () => {
   const [password, setPassword] = useState('')
   const [error, setError] = useState("")
 
-  const handleSubmit = (e: FormEvent)=>{
+  const router = useRouter()
+
+  const handleSubmit = async (e: FormEvent)=>{
     e.preventDefault()
     if(!name || !email || !password){
       setError("Please enter all fields")
       return
+    }
+    try {
+
+      const resUserExists = await fetch("api/userExists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({email})
+      });
+
+      const { user } = await resUserExists.json()
+      if(user){
+        setError("User already exists")
+        return 
+      }
+
+      const res = await fetch('api/register', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        })
+      })
+      if(res.ok){
+        router.push("/")
+        setName('')
+        setEmail('')
+        setPassword('')
+      } else{
+        console.log("Error")
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
