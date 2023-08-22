@@ -1,23 +1,46 @@
 "use client";
 import Link from "next/link";
-import { useState, FormEvent } from "react"
-
+import { useState, FormEvent } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const LoginFrom = () => {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [error, setError] = useState("")
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: FormEvent) => {
+  const router = useRouter()
 
-  } 
+ const handleSubmit = async (e: FormEvent) => {
+   e.preventDefault();
+
+   try {
+     const res = await signIn("credentials", {
+       email,
+       password,
+       redirect: false,
+     });
+
+     if (res?.error) {
+       setError("Invalid Credentials");
+       return;
+     }
+
+     router.replace("dashboard");
+   } catch (error) {
+     console.log(error);
+   }
+ };
 
   return (
     <div className='grid place-items-center h-screen bg-neutral-50'>
       <div className='shadow-lg rounded-lg p-5 border-t-4 border-black flex justify-start flex-col bg-white'>
         <h1 className='font-semibold text-xl border-b-[1px]'>Sign In</h1>
         {/* Form */}
-        <form onSubmit={handleSubmit} className='flex flex-col w-full gap-4 my-6'>
+        <form
+          onSubmit={handleSubmit}
+          className='flex flex-col w-full gap-4 my-6'
+        >
           {/* Error Message */}
           {error && (
             <div className='bg-rose-500 w-full text-white px-2 py-2 rounded-md my-2 text-sm'>
@@ -56,7 +79,11 @@ const LoginFrom = () => {
               className='border-2 px-4 py-2 border-neutral-300 rounded-sm outline-none focus:border-neutral-700 bg-zinc-100/4 shadow-smw-[400px]'
             />
           </div>
-          <button type="submit" className='w-full text-center bg-white border-2 border-black font-semibold px-6 py-2 rounded-md text-black transition hover:bg-black hover:text-white'>
+          <button
+            type='submit'
+            className='w-full text-center bg-white border-2 border-black font-semibold px-6 py-2 rounded-md text-black transition hover:bg-black hover:text-white'
+            onClick={handleSubmit}
+          >
             Login
           </button>
         </form>

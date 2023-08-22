@@ -1,6 +1,9 @@
 "use client"
+import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react"
 
 const UserInfo = () => {
+  const {data: session} = useSession()
   return (
     <div className='grid place-items-center h-screen bg-neutral-50'>
       <div className='border-t-4 border-black rounded-lg shadow p-5 shadow-lg flex flex-col justify-start gap-3 bg-white'>
@@ -8,14 +11,21 @@ const UserInfo = () => {
         {/* Information */}
         <div className='flex mt items-center mt-2'>
           <h1 className='text-start'>Name:</h1>
-          <div className='ml-2 py-[2px] font-semibold'>Beamlak</div>
+          <div className='ml-2 py-[2px] font-semibold'>
+            {session?.user?.name}
+          </div>
         </div>
         {/* Information */}
         <div className='flex mt items-center'>
           <h1 className='text-start'>Email:</h1>
-          <div className='ml-2 py-[2px] font-semibold'>Beamlak@gmail.com</div>
+          <div className='ml-2 py-[2px] font-semibold'>
+            {session?.user?.email}
+          </div>
         </div>
-        <button className='w-full text-center bg-white border-2 border-black font-semibold px-6 py-2 rounded-md text-black transition hover:bg-black hover:text-white mt-2'>
+        <button
+          className='w-full text-center bg-white border-2 border-black font-semibold px-6 py-2 rounded-md text-black transition hover:bg-black hover:text-white mt-2'
+          onClick={() => signOut()}
+        >
           Logout
         </button>
       </div>
