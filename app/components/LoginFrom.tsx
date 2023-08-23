@@ -13,22 +13,19 @@ const LoginFrom = () => {
 
  const handleSubmit = async (e: FormEvent) => {
    e.preventDefault();
-
    try {
      const res = await signIn("credentials", {
        email,
        password,
        redirect: false,
      });
-     console.log("Resopnse")
-     console.log(res)
+
 
      if (res?.error) {
        setError("Invalid Credentials");
        return;
      }
      if(res?.ok){
-        console.log("OK")
         router.replace("/dashboard");
      }
    } catch (error) {

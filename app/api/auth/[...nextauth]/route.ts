@@ -13,7 +13,6 @@ const authOptions: NextAuthOptions = {
 
       async authorize(credentials) {
         const { email, password } = credentials as Record<string, string>;
-        console.log("Email", email);
         try {
           await connectMongoDB();
           const user = await User.findOne({ email });
@@ -25,29 +24,18 @@ const authOptions: NextAuthOptions = {
           }
           return user;
         } catch (error) {
-          console.log(error);
+          console.log("There was an error", error);
         }
       },
     }),
   ],
-  // session: {
-  //   strategy: "jwt",
-  // },
-  // secret: process.env.NEXTAUTH_URL,
-  // pages: {
-  //   signIn: "/",
-  // },
-  callbacks: {
-    async jwt({ token, user }) {
-      return { ...token, ...user };
-    },
-
-    async session({ session, token }) {
-      session.user = token as any;
-      return session;
-    },
+  session: {
+    strategy: "jwt",
   },
-  // callbackUrl: "http://localhost:3000/dashboard",
+  secret: process.env.NEXTAUTH_SECRET,
+  pages: {
+    signIn: "/",
+  },
 };
 
 const handler = NextAuth(authOptions)
