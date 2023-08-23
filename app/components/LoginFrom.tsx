@@ -9,7 +9,7 @@ const LoginFrom = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const router = useRouter()
+  const router = useRouter();
 
  const handleSubmit = async (e: FormEvent) => {
    e.preventDefault();
@@ -20,13 +20,17 @@ const LoginFrom = () => {
        password,
        redirect: false,
      });
+     console.log("Resopnse")
+     console.log(res)
 
      if (res?.error) {
        setError("Invalid Credentials");
        return;
      }
-
-     router.replace("dashboard");
+     if(res?.ok){
+        console.log("OK")
+        router.replace("/dashboard");
+     }
    } catch (error) {
      console.log(error);
    }
