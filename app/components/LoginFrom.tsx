@@ -22,7 +22,7 @@ const LoginFrom = () => {
 
 
      if (res?.error) {
-       setError("Invalid Credentials");
+      setError('Invalid Credentials')
        return;
      }
      if(res?.ok){
@@ -32,6 +32,7 @@ const LoginFrom = () => {
      console.log(error);
    }
  };
+  
 
   return (
     <div className='grid place-items-center h-screen bg-neutral-50'>
