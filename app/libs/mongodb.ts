@@ -5,7 +5,6 @@ export const connectMongoDB = async ()=>{
         const mongodb_uri = process.env.MONGODB_URI;
         if(typeof mongodb_uri !== 'undefined'){
             await mongoose.connect(mongodb_uri);
-            console.log("Connected to mongodb")
         } else{
             console.log("The MONGODB_URI environment variable is not defined.");
         }

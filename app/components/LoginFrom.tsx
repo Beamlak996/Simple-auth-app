@@ -22,7 +22,7 @@ const LoginFrom = () => {
 
 
      if (res?.error) {
-      setError('Invalid Credentials')
+      setError('Username or Password is incorrect')
        return;
      }
      if(res?.ok){
